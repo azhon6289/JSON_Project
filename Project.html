@@ -1,0 +1,84 @@
+<html>
+<style>
+	body{
+		background-color: orange;
+	}
+	.card{
+		width:300px;
+		background-color:white;
+		padding:10px;
+		margin:10px;
+		display:inline-block;
+		border-radius:10px;
+		box-shadow:black 5px 5px 5px;
+	}
+	h1{
+		font-family:"Comic-Sans";
+		color: red
+		text-shadow: red 5px 5px 5px;
+	}
+	a{
+		background-color:white;
+		text-decoration:none;
+		color:blue;
+		font-weight:bold;
+		padding:5px;
+	}
+</style>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+
+<script type= "text/template" id="business">
+	<div class='card'>
+		<h2> {{company_name}} </h2>
+		<h3> Type:{{subindustry}} </h3>
+		<h3> {{address}}<h3>
+		<h3> {{postcode}}<h3>
+		<h3> Phone number:{{phone}} </h3>
+	</div>
+	
+</script>
+
+<script>
+var data="";
+
+	function Timesq(){				
+		$.getJSON("https://data.cityofnewyork.us/resource/d9fw-zp4j.json",function(results){
+			data = results;
+		})
+	}
+	
+	function food(){
+		var build = "";
+		
+		
+		var place = document.getElementById("place");
+		var output = document.getElementById("output");
+		var busy = document.getElementById("business").innerHTML;
+		
+		
+		for(var index = 0; index < data.length; index++){
+		   if(data[index].company_name.toUpperCase().indexOf(place.value.toUpperCase()) != -1){
+			build += Mustache.render(busy, data[index]);
+		  
+		  }
+		}	
+		output.innerHTML = build;	
+	}
+
+	
+
+</script>
+<body onload="Timesq()">
+	<h1> Times Square Food and Beverage locations</h1>
+	<input type="text" id="place" placeholder="Enter Place">
+	
+	<button onclick="food()">Search</button>
+	<p>Sample Searches: Cafe, Starbucks.</p>
+	<div id = "output"</div>
+	
+</body>
+
+</html>
